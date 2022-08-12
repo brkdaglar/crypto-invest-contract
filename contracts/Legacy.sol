@@ -29,10 +29,12 @@ contract LegacyContract {
 
     address[] public parentAddress;
 
-    constructor(string memory _ownerName) {
+    uint256 public value;
+
+    /* constructor(string memory _ownerName) {
         owner.adres = msg.sender;
         owner.name = _ownerName;
-    }
+    } **/
 
     function joinParent(string memory _name) public {
         Parent storage newParent = parents[msg.sender];
@@ -53,4 +55,20 @@ contract LegacyContract {
     }
 
     function sendMoney(address _toAdres) internal {}
+
+    function testValueSet(uint256 _value) public {
+        value = _value;
+    }
+
+    function testValueGet() public view returns (uint256) {
+        return value;
+    }
+
+    function setBalanceAccessAge(uint256 _balanceAccessAge) public {
+        balanceAccessAge = _balanceAccessAge;
+    }
+
+    function getBalanceAccessAge() public view returns (uint256) {
+        return balanceAccessAge;
+    }
 }
