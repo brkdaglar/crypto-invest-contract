@@ -10,19 +10,19 @@ async function main() {
   console.log("Deployed");
   console.log(`Deployed contract to: ${legacy.address}`);
   //console.log(network.config);
-  if (network.config.chainId === 4 && process.env.ETHERSCAN_API_KEY) {
+  /* if (network.config.chainId === 4 && process.env.ETHERSCAN_API_KEY) {
     await legacy.deployTransaction.wait(6);
     await verify(legacy.address, []);
-  }
+  }*/
 
   // interact smart contract
-  const currentValue = await legacy.testValueGet();
+  /*const currentValue = await legacy.testValueGet();
   console.log(`Value is ${currentValue}`);
 
   const transactionResponse = await legacy.testValueSet(5);
   await transactionResponse.wait(1);
   const newValue = await legacy.testValueGet();
-  console.log(`New Value is ${newValue}`);
+  console.log(`New Value is ${newValue}`);*/
 }
 // verify
 async function verify(contractAddress, args) {
