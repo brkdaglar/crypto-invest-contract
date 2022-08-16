@@ -41,19 +41,19 @@ contract LegacyContract {
     address[] parentAddress;
     address[] childAddress;
 
-    modifier shouldUnregister(){
-        require(Roles.unregistered == addressControl(msg.sender), "zaten kayitli");
+    modifier userCheck(address _address){
+        require(Roles.unregistered == addressControl(_address), "Kullanici Kayitli");
         _;
     }
 
-    function addParent(string memory _firstName, string memory _lastName) public shouldUnregister{
+    function addParent(string memory _firstName,string memory _lastName) public userCheck(msg.sender){
         Parent storage parent = parentsMap[msg.sender]; 
-        parent.addresses = msg.sender;
-        parent.firstName = _firstName;
-        parent.lastName = _lastName;
+        parent.addresses=msg.sender;
+        parent.firstName=_firstName;
+        parent.lastName=_lastName;
     }
 
-    function addChild(address _address, string memory _firstName, string memory _lastName) public shouldUnregister{
+    function addChild(address _address,string memory _firstName,string memory _lastName) public userCheck(_address){
         Child storage child = childrenMap[_address]; 
         child.addresses=_address;
         child.firstName=_firstName;
