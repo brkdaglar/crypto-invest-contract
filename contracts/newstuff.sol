@@ -36,7 +36,6 @@ contract LegacyContract {
 
     mapping(address => Parent) public parentsMap;
     mapping(address => Child) public childrenMap;
-    uint256 public candidateConut;
 
     uint256 balanceAccessAge = 18;
     address[] parentAddress;
@@ -62,7 +61,6 @@ contract LegacyContract {
 
         Parent storage parent = parentsMap[msg.sender];
         parent.childrensAddress.push(_address);
-        candidateConut++;
     }
 
     function addressControl(address _address) public view returns(Roles){
