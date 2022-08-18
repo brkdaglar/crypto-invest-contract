@@ -26,6 +26,8 @@
     "typechain": "^8.1.0"
   },
   "dependencies": {
+    "@types/mocha": "^9.1.1",
+    "chai-as-promised": "^7.1.1",
     "dotenv": "^16.0.1"
   }
 }
