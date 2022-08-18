@@ -13,7 +13,6 @@ contract Legacy {
         string firstName;
         string lastName;
         uint256 balance;
-        uint256 age;
         uint256 dateOfBirthTimeStamp;
         uint256 accessDateTimeStamp;
     }
@@ -70,6 +69,7 @@ contract Legacy {
         child.lastName = _lastName;
         child.dateOfBirthTimeStamp = _dateOfBirthTimeStamp;
         child.accessDateTimeStamp = _accessDateTimeStamp;
+        child.balance = 0;
 
         Parent storage parent = parentsMap[msg.sender];
         parent.childrensAddress.push(_address);
