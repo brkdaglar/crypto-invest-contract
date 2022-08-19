@@ -1,15 +1,19 @@
 const { assert } = require("chai");
+const { Contract } = require("ethers");
 const { ethers } = require("hardhat");
 
-describe("LegacyAccess", function () {
+describe("AdminInitialized", function () {
   let Legacy, legacy;
   beforeEach(async function () {
-    Legacy = await ethers.getContractFactory("LegacyContract");
+    Legacy = await ethers.getContractFactory("Legacy");
     legacy = await Legacy.deploy();
   });
-  it("Balance acccess age must be 18", async function () {
-    const balanceAccessAge = await legacy.getBalanceAccessAge();
-    const expectedBalanceAccessValue = "1";
-    assert.equal(balanceAccessAge.toString(), expectedBalanceAccessValue);
+
+  // Uncorrect Test must be fixed
+  it("Admin succesfully initialized", async function () {
+    const adminAddress = legacy.getAdmin();
+    const [user1, user2] = await ethers.getSigners();
+    const expectedAddress = user1.address;
+    assert.equal(adminAddress.toString(), expectedAddress.toString());
   });
 });
