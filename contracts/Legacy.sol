@@ -46,6 +46,19 @@ contract Legacy {
         _;
     }
 
+    modifier controlParentChild(address _address) {
+        require(parentChild(_address), "cocuk bu parentin degil");
+        _;
+    }
+
+    function parentChild(address _address) private view returns (bool) {
+        Parent storage parent = parentsMap[msg.sender];
+        for (uint256 i = 0; i <= parent.childrensAddress.length; i++) {
+            if (parent.childrensAddress[i] == _address) return true;
+        }
+        return false;
+    }
+
     function addParent(string memory _firstName, string memory _lastName)
         public
         userCheck(msg.sender)
@@ -105,4 +118,37 @@ contract Legacy {
         }
         return childsFromParent;
     }
+
+    function storeETH(address _address)
+        public
+        payable
+        controlParentChild(_address)
+    {
+        require(msg.value > 0, "Gonderilecek deger 0'dan buyuk olmali");
+        Child storage child = childrenMap[_address];
+        child.balance += msg.value;
+    }
+
+    function parentWithdraw(address payable _address, uint256 amount)
+        public
+        controlParentChild(_address)
+    {
+        Child storage child = childrenMap[_address];
+        require(child.balance >= amount, "Hesap bakiyesi yetersiz");
+        child.balance -= amount;
+        payable(msg.sender).transfer(amount);
+        //amount burada wei cinsinden
+    }
+
+    /*function childWithdraw(address payable _address,uint256 date) public {	
+        Child storage child = childrenMap[_address]; 	
+        require(child.dateOfBirth >= date,"cekemezsiniz");	
+        payable(msg.sender).transfer(child.balance);	
+    }*/
+
+    /*function childWithdraw(uint256 date) payable public {	
+        Child storage child = childrenMap[msg.sender]; 	
+        require(child.dateOfBirth >= date,"cekemezsiniz");	
+        payable(msg.sender).transfer(child.balance);	
+    }*/
 }
