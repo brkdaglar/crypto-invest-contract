@@ -5,7 +5,7 @@ const chaiAsPromised = require("chai-as-promised")
 const expect=chai.expect;
 chai.use(chaiAsPromised);
 
-describe("kubra",()=>{
+describe("LegacyContract",()=>{
     let legacy;
     let wallets;
 
@@ -14,7 +14,7 @@ describe("kubra",()=>{
     })
 
     beforeEach(async ()=>{
-        const factory = await ethers.getContractFactory("kubra");
+        const factory = await ethers.getContractFactory("LegacyContract");
         legacy = await factory.deploy();
 
     });

@@ -52,7 +52,7 @@ contract kubra {
         parent.lastName=_lastName;
     }
 
-    function addChild(address _address,string memory _firstName,string memory _lastName) public userCheck(_address){
+    /*function addChild(address _address,string memory _firstName,string memory _lastName) public userCheck(_address){
         Child storage child = childrenMap[_address]; 
         child.addresses=_address;
         child.firstName=_firstName;
@@ -60,7 +60,7 @@ contract kubra {
 
         Parent storage parent = parentsMap[msg.sender];
         parent.childrenAddresses.push(_address);
-    }
+    }*/
 
     function addressControl(address _address) public view returns(Roles){
         if(_address == owner) return Roles.admin;
@@ -80,10 +80,10 @@ contract kubra {
         child.balance+=msg.value;
     } 
 
-    function getBalance(address _address) public view returns(uint256){
+    /*function getBalance(address _address) public view returns(uint256){
         Child storage child = childrenMap[_address];  
         return child.balance;
-    }
+    }*/
 
     modifier controlParentChild(address _address){
         require(parentChild(_address), "cocuk bu parentin degil");
@@ -106,6 +106,13 @@ contract kubra {
         }
         return false;
     } 
+
+
+    /*function childWithdraw(address payable _address,uint256 date) public {
+        Child storage child = childrenMap[_address]; 
+        require(child.dateOfBirth >= date,"cekemezsiniz");
+        payable(msg.sender).transfer(child.balance);
+    }*/
 
     
     
