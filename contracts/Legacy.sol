@@ -104,8 +104,8 @@ contract Legacy {
         return parentsMap[msg.sender];
     }
 
-    function getChild(address _adres) public view returns (Child memory) {
-        return childrenMap[_adres];
+    function getChild() public view returns (Child memory) {
+        return childrenMap[msg.sender];
     }
 
     function getChildsFromParent() public view returns (Child[] memory) {
