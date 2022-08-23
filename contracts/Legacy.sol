@@ -25,9 +25,9 @@ contract Legacy {
     }
 
     enum Roles {
-        parent,
-        child,
         admin,
+        child,
+        parent,
         unregistered
     }
 
