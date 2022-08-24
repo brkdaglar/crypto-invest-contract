@@ -67,6 +67,7 @@ contract Legacy {
         parent.addresses = msg.sender;
         parent.firstName = _firstName;
         parent.lastName = _lastName;
+        parentAddress.push(parent.addresses);
     }
 
     function addChild(
@@ -86,6 +87,7 @@ contract Legacy {
 
         Parent storage parent = parentsMap[msg.sender];
         parent.childrensAddress.push(_address);
+        childAddress.push(_address);
     }
 
     function addressControl(address _address) public view returns (Roles) {
@@ -151,4 +153,22 @@ contract Legacy {
         require(child.dateOfBirth >= date,"cekemezsiniz");	
         payable(msg.sender).transfer(child.balance);	
     }*/
+
+    function getAllParent() public view returns (Parent[] memory) {
+        uint256 len = parentAddress.length;
+        Parent[] memory allParent = new Parent[](len);
+        for (uint8 i = 0; i < len; i++) {
+            allParent[i] = parentsMap[parentAddress[i]];
+        }
+        return allParent;
+    }
+
+    function getAllChild() public view returns (Child[] memory) {
+        uint256 len = childAddress.length;
+        Child[] memory allChild = new Child[](len);
+        for (uint8 i = 0; i < len; i++) {
+            allChild[i] = childrenMap[childAddress[i]];
+        }
+        return allChild;
+    }
 }
