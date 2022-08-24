@@ -171,4 +171,19 @@ contract Legacy {
         }
         return allChild;
     }
+
+    function getChildsFromParentWithAddress(address _adres)
+        public
+        view
+        returns (Child[] memory)
+    {
+        uint256 len = parentsMap[_adres].childrensAddress.length;
+        Child[] memory childsFromParent = new Child[](len);
+        for (uint8 i = 0; i < len; i++) {
+            childsFromParent[i] = childrenMap[
+                parentsMap[_adres].childrensAddress[i]
+            ];
+        }
+        return childsFromParent;
+    }
 }
