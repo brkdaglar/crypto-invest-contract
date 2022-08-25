@@ -164,4 +164,50 @@ describe("LegacyContract", () => {
       );
     }
   });
+  
+  it("getChild", async() => {
+    const parentLegacy = legacy.connect(wallets[1]);
+
+    const firstName = "child"
+    const lastName = "parent"
+    const addr = wallets[2].address;
+    const date = 10;
+
+    await parentLegacy.addParent("parent", "parent");
+    const parent = await parentLegacy.parentsMap(wallets[1].address);
+
+    await parentLegacy.addChild(addr, firstName, lastName, date, 12);
+    const child = await legacy.childrenMap(addr);
+
+    const a = legacy.connect(wallets[2]).getChild();
+    expect(a).eventually.rejectedWith(child);
+  });
+
+  it("parentChild", async () => {
+    const legacyParent = legacy.connect(wallets[1]);
+
+    const firstName = "Parent";
+    const lastName = "Parent";
+    await legacyParent.addParent(firstName, lastName);
+    
+    let _address = wallets[2].address;
+    let _firstName = "Child";
+    let _lastName = "Parent";
+    let _accesDateStamp = 225646566;
+    let _birthDateStamp = 149484998;
+
+    await legacyParent.addChild(
+        _address,
+        _firstName,
+        _lastName,
+        _birthDateStamp,
+        _accesDateStamp
+    );
+        
+    let expectedcheck = true;
+    const  _check = legacyParent.parentChild(_address);
+
+    expect(_check).equal(expectedcheck); 
+  });
+  
 });
