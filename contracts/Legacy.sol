@@ -25,9 +25,9 @@ contract Legacy {
     }
 
     enum Roles {
-        parent,
-        child,
         admin,
+        child,
+        parent,
         unregistered
     }
 
@@ -51,7 +51,7 @@ contract Legacy {
         _;
     }
 
-    function parentChild(address _address) private view returns (bool) {
+    function parentChild(address _address) public view returns (bool) {
         Parent storage parent = parentsMap[msg.sender];
         for (uint256 i = 0; i <= parent.childrensAddress.length; i++) {
             if (parent.childrensAddress[i] == _address) return true;
@@ -104,8 +104,8 @@ contract Legacy {
         return parentsMap[msg.sender];
     }
 
-    function getChild(address _adres) public view returns (Child memory) {
-        return childrenMap[_adres];
+    function getChild() public view returns (Child memory) {
+        return childrenMap[msg.sender];
     }
 
     function getChildsFromParent() public view returns (Child[] memory) {
@@ -140,15 +140,13 @@ contract Legacy {
         //amount burada wei cinsinden
     }
 
-    /*function childWithdraw(address payable _address,uint256 date) public {	
-        Child storage child = childrenMap[_address]; 	
-        require(child.dateOfBirth >= date,"cekemezsiniz");	
-        payable(msg.sender).transfer(child.balance);	
-    }*/
-
-    /*function childWithdraw(uint256 date) payable public {	
-        Child storage child = childrenMap[msg.sender]; 	
-        require(child.dateOfBirth >= date,"cekemezsiniz");	
-        payable(msg.sender).transfer(child.balance);	
-    }*/
+    function childWithdraw(uint256 date) public payable {
+        Child storage child = childrenMap[msg.sender];
+        require(
+            child.accessDateTimeStamp <= date,
+            "Tarih gelmedigi icin cekilemez"
+        );
+        payable(msg.sender).transfer(child.balance);
+        child.balance = 0;
+    }
 }
