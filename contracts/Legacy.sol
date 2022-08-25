@@ -139,17 +139,16 @@ contract Legacy {
         //amount burada wei cinsinden
     }
 
-    /*function childWithdraw(address payable _address,uint256 date) public {	
-        Child storage child = childrenMap[_address]; 	
-        require(child.dateOfBirth >= date,"cekemezsiniz");	
-        payable(msg.sender).transfer(child.balance);	
-    }*/
-
-    /*function childWithdraw(uint256 date) payable public {	
-        Child storage child = childrenMap[msg.sender]; 	
-        require(child.dateOfBirth >= date,"cekemezsiniz");	
-        payable(msg.sender).transfer(child.balance);	
-    }*/
+    function childWithdraw(uint256 date) public payable {
+        Child storage child = childrenMap[msg.sender];
+        require(
+            child.accessDateTimeStamp <= date,
+            "Tarih gelmedigi icin cekilemez"
+        );
+        require(child.balance != 0, "Hesabinizda para bulunmamaktadir");
+        payable(msg.sender).transfer(child.balance);
+        child.balance = 0;
+    }
 
     function getAllParent() public view returns (Parent[] memory) {
         uint256 len = parentAddress.length;
