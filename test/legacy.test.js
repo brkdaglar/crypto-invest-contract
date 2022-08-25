@@ -55,13 +55,11 @@ describe("LegacyContract", () => {
     const _firstName = "Burak";
     const _lastName = "Daglar";
     const _accesDateStamp = 225646566;
-    const _birthDateStamp = 149484998;
 
     await legacyParent.addChild(
       _address,
       _firstName,
       _lastName,
-      _birthDateStamp,
       _accesDateStamp
     );
 
@@ -88,13 +86,11 @@ describe("LegacyContract", () => {
     const _firstName = "Burak";
     const _lastName = "Daglar";
     const _accesDateStamp = 225646566;
-    const _birthDateStamp = 149484998;
 
     await legacyParent.addChild(
       _address,
       _firstName,
       _lastName,
-      _birthDateStamp,
       _accesDateStamp
     );
 
@@ -102,7 +98,6 @@ describe("LegacyContract", () => {
       _address,
       _firstName,
       _lastName,
-      _birthDateStamp,
       _accesDateStamp
     );
 
@@ -121,13 +116,11 @@ describe("LegacyContract", () => {
     let _firstName = "Burak";
     let _lastName = "Daglar";
     let _accesDateStamp = 225646566;
-    let _birthDateStamp = 149484998;
 
     await legacyParent.addChild(
       _address,
       _firstName,
       _lastName,
-      _birthDateStamp,
       _accesDateStamp
     );
 
@@ -135,13 +128,11 @@ describe("LegacyContract", () => {
     _firstName = "Darth";
     _lastName = "Vader";
     _accesDateStamp = 225646566;
-    _birthDateStamp = 149484998;
 
     await legacyParent.addChild(
       _address,
       _firstName,
       _lastName,
-      _birthDateStamp,
       _accesDateStamp
     );
 
@@ -164,12 +155,12 @@ describe("LegacyContract", () => {
       );
     }
   });
-  
-  it("getChild", async() => {
+
+  it("getChild", async () => {
     const parentLegacy = legacy.connect(wallets[1]);
 
-    const firstName = "child"
-    const lastName = "parent"
+    const firstName = "child";
+    const lastName = "parent";
     const addr = wallets[2].address;
     const date = 10;
 
@@ -189,25 +180,133 @@ describe("LegacyContract", () => {
     const firstName = "Parent";
     const lastName = "Parent";
     await legacyParent.addParent(firstName, lastName);
-    
+
     let _address = wallets[2].address;
     let _firstName = "Child";
     let _lastName = "Parent";
     let _accesDateStamp = 225646566;
-    let _birthDateStamp = 149484998;
 
     await legacyParent.addChild(
-        _address,
-        _firstName,
-        _lastName,
-        _birthDateStamp,
-        _accesDateStamp
+      _address,
+      _firstName,
+      _lastName,
+      _accesDateStamp
     );
-        
-    let expectedcheck = true;
-    const  _check = legacyParent.parentChild(_address);
 
-    expect(_check).equal(expectedcheck); 
+    let expectedcheck = true;
+    const _check = legacyParent.parentChild(_address);
+
+    expect(_check).equal(expectedcheck);
   });
-  
+
+  it("parent child control", async () => {
+    const firstName = "cocuk";
+    const lastName = "cocuk1";
+    const addr = wallets[2].address;
+    const date = 110719;
+    const parentLegacy = legacy.connect(wallets[1]);
+
+    await parentLegacy.addParent("kubra", "ocal");
+    const parent = await parentLegacy.parentsMap(wallets[1].address);
+    //console.log("parent: ", parent);
+
+    await parentLegacy.addChild(addr, firstName, lastName, date, "11111");
+    const child = await legacy.childrenMap(addr);
+    //console.log("child: ", child);
+
+    expect(child.addresses).equal(addr);
+    expect(child.firstName).equal(firstName);
+    expect(child.lastName).equal(lastName);
+
+    const parentChild = await parentLegacy.parentChild(addr);
+    expect(parentChild).equal(true);
+  });
+
+  it("user role control", async () => {
+    const firstName = "kubra";
+    const lastName = "ocal";
+    await legacy.connect(wallets[1]).addParent(firstName, lastName);
+    const parent = await legacy.parentsMap(wallets[1].address);
+
+    const role = await legacy
+      .connect(wallets[1])
+      .addressControl(wallets[1].address);
+    //console.log("role: ", role);
+    expect(role).equal(2);
+  });
+
+  it("store eth", async () => {
+    const firstName = "cocuk";
+    const lastName = "cocuk1";
+    const addr = wallets[2].address;
+    const date = 10;
+    const parentLegacy = legacy.connect(wallets[1]);
+
+    await parentLegacy.addParent("kubra", "ocal");
+    const parent = await parentLegacy.parentsMap(wallets[1].address);
+
+    await parentLegacy.addChild(addr, firstName, lastName, date, "12");
+
+    await parentLegacy.storeETH(addr, { value: 15 });
+    const child = await legacy.childrenMap(addr);
+    expect(child.balance.toNumber()).equal(15);
+  });
+
+  it("withdraw parent", async () => {
+    const firstName = "cocuk";
+    const lastName = "cocuk1";
+    const addr = wallets[2].address;
+    const date = 10;
+    const parentLegacy = legacy.connect(wallets[1]);
+
+    await parentLegacy.addParent("kubra", "ocal");
+    const parent = await parentLegacy.parentsMap(wallets[1].address);
+
+    await parentLegacy.addChild(addr, firstName, lastName, date, "12");
+
+    await parentLegacy.storeETH(addr, {
+      value: ethers.utils.parseEther("5.0").toString(),
+    });
+
+    const oldBalance = await wallets[1].getBalance();
+    const tx = await parentLegacy.parentWithdraw(
+      addr,
+      ethers.utils.parseEther("2.0").toString()
+    );
+    const newBalance = await wallets[1].getBalance();
+    //console.log({ oldBalance: ethers.utils.formatEther(oldBalance), newBalance: ethers.utils.formatEther(newBalance) });
+
+    const child = await legacy.childrenMap(addr);
+    expect(oldBalance.lt(newBalance)).equal(true);
+  });
+
+  it("child withdraw", async () => {
+    const firstName = "cocuk";
+    const lastName = "cocuk1";
+    const addr = wallets[2].address;
+    const date = 10;
+    const parentLegacy = legacy.connect(wallets[1]);
+
+    await parentLegacy.addParent("kubra", "ocal");
+    const parent = await parentLegacy.parentsMap(wallets[1].address);
+
+    await parentLegacy.addChild(addr, firstName, lastName, date);
+    const child = await legacy.childrenMap(addr);
+
+    await parentLegacy.storeETH(addr, {
+      value: ethers.utils.parseEther("5.0").toString(),
+    });
+
+    const oldBalance = await wallets[2].getBalance();
+    const tx = await legacy
+      .connect(wallets[2])
+      .childWithdraw(ethers.utils.parseEther("2.0").toString());
+    const newBalance = await wallets[2].getBalance();
+    console.log({
+      oldBalance: ethers.utils.formatEther(oldBalance),
+      newBalance: ethers.utils.formatEther(newBalance),
+    });
+
+    expect(oldBalance.lt(newBalance)).equal(true);
+  });
 });

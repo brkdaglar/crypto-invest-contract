@@ -50,7 +50,7 @@ contract Legacy {
         _;
     }
 
-    function parentChild(address _address) private view returns (bool) {
+    function parentChild(address _address) public view returns (bool) {
         Parent storage parent = parentsMap[msg.sender];
         for (uint256 i = 0; i <= parent.childrensAddress.length; i++) {
             if (parent.childrensAddress[i] == _address) return true;
