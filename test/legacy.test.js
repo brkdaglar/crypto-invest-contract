@@ -74,7 +74,6 @@ describe("LegacyContract", () => {
     expect(child.addresses).equal(_address);
     expect(child.balance).equal(0);
     expect(child.accessDateTimeStamp).equal(_accesDateStamp);
-    expect(child.dateOfBirthTimeStamp).equal(_birthDateStamp);
   });
 
   it("addChild should check user is added", async () => {
@@ -160,9 +159,6 @@ describe("LegacyContract", () => {
       expect(childsArray[i].firstName).equal(child.firstName);
       expect(childsArray[i].lastName).equal(child.lastName);
       expect(childsArray[i].balance).equal(child.balance);
-      expect(childsArray[i].dateOfBirthTimeStamp).equal(
-        child.dateOfBirthTimeStamp
-      );
       expect(childsArray[i].accessDateTimeStamp).equal(
         child.accessDateTimeStamp
       );

@@ -17,7 +17,9 @@ module.exports = {
   networks: {
     rinkeby: {
       url: RINKEBY_RPC_URL,
-      accounts: [PRIVATE_KEY],
+      accounts: {
+        mnemonic: MNEMONIC_KEY,
+      },
       chainId: 4,
     },
     hardhat: {

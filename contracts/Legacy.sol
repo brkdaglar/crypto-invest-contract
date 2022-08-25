@@ -13,7 +13,6 @@ contract Legacy {
         string firstName;
         string lastName;
         uint256 balance;
-        uint256 dateOfBirthTimeStamp;
         uint256 accessDateTimeStamp;
     }
 
@@ -74,14 +73,12 @@ contract Legacy {
         address _address,
         string memory _firstName,
         string memory _lastName,
-        uint256 _dateOfBirthTimeStamp,
         uint256 _accessDateTimeStamp
     ) public userCheck(_address) {
         Child storage child = childrenMap[_address];
         child.addresses = _address;
         child.firstName = _firstName;
         child.lastName = _lastName;
-        child.dateOfBirthTimeStamp = _dateOfBirthTimeStamp;
         child.accessDateTimeStamp = _accessDateTimeStamp;
         child.balance = 0;
 

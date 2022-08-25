@@ -9,8 +9,6 @@ async function main() {
   await legacy.deployed();
   console.log("Deployed");
   console.log(`Deployed contract to: ${legacy.address}`);
-  const [user1, user2] = await ethers.getSigners();
-  console.log(user1, user2);
 }
 
 // main
