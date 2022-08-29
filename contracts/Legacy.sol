@@ -58,10 +58,13 @@ contract Legacy {
         return false;
     }
 
+    event AddParent(string _firstName, string _lastName);
+
     function addParent(string memory _firstName, string memory _lastName)
         public
         userCheck(msg.sender)
     {
+        emit AddParent(_firstName, _lastName);
         Parent storage parent = parentsMap[msg.sender];
         parent.addresses = msg.sender;
         parent.firstName = _firstName;
