@@ -309,4 +309,36 @@ describe("LegacyContract", () => {
 
     expect(oldBalance.lt(newBalance)).equal(true);
   });
+
+  it("child remove", async () => {
+    const legacyParent = legacy.connect(wallets[1]);
+
+    const firstName = "Jack";
+    const lastName = "Sparrow";
+
+    await legacyParent.addParent(firstName, lastName);
+
+    const _address = wallets[2].address;
+    const _firstName = "Burak";
+    const _lastName = "Daglar";
+    const _accesDateStamp = 225646566;
+
+    await legacyParent.addChild(
+      _address,
+      _firstName,
+      _lastName,
+      _accesDateStamp
+    );
+
+    const parent = await legacyParent.getParent();
+    const childAddress = parent.childrensAddress[0];
+    const child = await legacy.childrenMap(childAddress);
+
+    await legacy.removeChild(_address);
+
+    const childRemove = await legacy.childrenMap(childAddress);
+
+    expect(childRemove.addresses).not.equal(child.addresses);
+
+  });
 });

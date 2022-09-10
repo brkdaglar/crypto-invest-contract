@@ -185,4 +185,19 @@ contract Legacy {
         }
         return childsFromParent;
     }
+
+    function removeChild(address _adres) public {
+        uint256 adres = uint256(uint160(_adres));
+        for(uint256 i=0;i<parentsMap[msg.sender].childrensAddress.length;i++){
+            if(parentsMap[msg.sender].childrensAddress[i]==_adres){
+                delete parentsMap[msg.sender].childrensAddress[adres];
+            }
+        }
+        for(uint256 i=0;i<childAddress.length;i++){
+            if(childAddress[i]==_adres){
+                delete childAddress[i];
+            }
+        }
+        delete childrenMap[_adres];
+    }//
 }
