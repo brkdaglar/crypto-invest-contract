@@ -1,4 +1,4 @@
-Frontend Repository : https://github.com/IntertechTeam3/crypto-invest-ui
+Frontend Repository : https://github.com/brkdaglar/crypto-invest-ui
 
 # Sample Hardhat Project
 
